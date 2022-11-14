@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CHM TestApp</string>
+    <string name="search">Hledat</string>
 </resources>

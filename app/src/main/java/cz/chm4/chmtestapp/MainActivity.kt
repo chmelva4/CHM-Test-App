@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import cz.chm4.chmtestapp.search.searchList.ui.SearchListScreen
 
 import cz.chm4.chmtestapp.theme.CHMTestAppTheme
 
@@ -21,6 +22,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CHMTestApp() {
     CHMTestAppTheme {
-       Text(" I am a text")
+      SearchListScreen()
     }
 }
