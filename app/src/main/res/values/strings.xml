@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">CHM TestApp</string>
     <string name="search">Hledat</string>
+    <string name="filter_active_desc">Filter aktivní</string>
+    <string name="filter_all">Vše</string>
+    <string name="filter_competitions">Soutěže</string>
+    <string name="filter_participants">Účastnící</string>
 </resources>
