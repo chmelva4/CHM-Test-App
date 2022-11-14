@@ -73,6 +73,8 @@ dependencies {
     implementation(libs.composeDestinationsCore)
     ksp(libs.composeDestinationsKsp)
 
+    implementation(libs.coilCompose)
+
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.bundles.androidTest)
     debugImplementation(libs.bundles.debug)

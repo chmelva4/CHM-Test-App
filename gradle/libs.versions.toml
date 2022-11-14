@@ -20,6 +20,8 @@ timber = "5.0.1"
 #versionCatalogCore = "0.42.0"
 #versionCatalogUpdate = "0.5.1"
 
+coilCompose = "2.2.2"
+
 [libraries]
 activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidTest = { module = "androidx.test.ext:junit", version.ref = "androidTest" }
@@ -39,6 +41,7 @@ material = { module = "androidx.compose.material:material", version.ref = "compo
 material3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 #timeTravel = { module = "com.arkivanov.mvikotlin:mvikotlin-timetravel", version.ref = "timeTravel" }
+coilCompose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
 
 [bundles]
 androidTest = [
