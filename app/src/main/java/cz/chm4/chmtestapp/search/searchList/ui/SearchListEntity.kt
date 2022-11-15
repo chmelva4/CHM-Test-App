@@ -1,7 +1,7 @@
 package cz.chm4.chmtestapp.search.searchList.ui
 
-import cz.chm4.chmtestapp.search.searchList.bl.EntityType
-import cz.chm4.chmtestapp.search.searchList.bl.Sport
+import cz.chm4.chmtestapp.search.common.bl.EntityType
+import cz.chm4.chmtestapp.search.common.bl.Sport
 
 data class SearchListEntity(
     val id: String,

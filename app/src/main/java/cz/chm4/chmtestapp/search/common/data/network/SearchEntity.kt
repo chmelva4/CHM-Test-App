@@ -1,4 +1,4 @@
-package cz.chm4.chmtestapp.search.searchList.network
+package cz.chm4.chmtestapp.search.common.data.network
 
 data class SearchEntity(
     val id: String,

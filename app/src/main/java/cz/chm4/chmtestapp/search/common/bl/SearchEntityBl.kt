@@ -1,4 +1,4 @@
-package cz.chm4.chmtestapp.search.searchList.bl
+package cz.chm4.chmtestapp.search.common.bl
 
 data class SearchEntityBl(
     val id: String,

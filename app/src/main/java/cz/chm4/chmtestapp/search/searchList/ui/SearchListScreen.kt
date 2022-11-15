@@ -42,7 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import cz.chm4.chmtestapp.R
-import cz.chm4.chmtestapp.search.searchList.bl.Sport
+import cz.chm4.chmtestapp.search.common.bl.Sport
 import cz.chm4.chmtestapp.theme.spacing
 
 @OptIn(ExperimentalLifecycleComposeApi::class)

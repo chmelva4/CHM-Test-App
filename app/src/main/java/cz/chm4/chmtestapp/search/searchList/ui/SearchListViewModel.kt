@@ -2,10 +2,10 @@ package cz.chm4.chmtestapp.search.searchList.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cz.chm4.chmtestapp.search.searchList.bl.EntityType
-import cz.chm4.chmtestapp.search.searchList.bl.SearchRepository
-import cz.chm4.chmtestapp.search.searchList.bl.Sport
-import cz.chm4.chmtestapp.search.searchList.network.liveSportApi
+import cz.chm4.chmtestapp.search.common.bl.EntityType
+import cz.chm4.chmtestapp.search.common.bl.SearchRepository
+import cz.chm4.chmtestapp.search.common.bl.Sport
+import cz.chm4.chmtestapp.search.common.data.network.liveSportApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine

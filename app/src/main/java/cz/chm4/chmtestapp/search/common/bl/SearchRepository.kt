@@ -1,6 +1,6 @@
-package cz.chm4.chmtestapp.search.searchList.bl
+package cz.chm4.chmtestapp.search.common.bl
 
-import cz.chm4.chmtestapp.search.searchList.network.LivesportSearchApi
+import cz.chm4.chmtestapp.search.common.data.network.LivesportSearchApi
 import cz.chm4.chmtestapp.search.searchList.ui.SearchFilter
 
 class SearchRepository(

@@ -1,7 +1,7 @@
-package cz.chm4.chmtestapp.search.searchList.bl
+package cz.chm4.chmtestapp.search.common.bl
 
-import cz.chm4.chmtestapp.search.searchList.network.IdObject
-import cz.chm4.chmtestapp.search.searchList.network.SearchEntity
+import cz.chm4.chmtestapp.search.common.data.network.IdObject
+import cz.chm4.chmtestapp.search.common.data.network.SearchEntity
 
 fun IdObject.toSport(): Sport {
     return Sport.values()[id - 1]
