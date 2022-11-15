@@ -21,6 +21,8 @@ timber = "5.0.1"
 #versionCatalogUpdate = "0.5.1"
 
 coilCompose = "2.2.2"
+retrofit = "2.9.0"
+retrofitMoshi = "2.9.0"
 
 [libraries]
 activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -42,6 +44,8 @@ material3 = { module = "androidx.compose.material3:material3", version.ref = "co
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 #timeTravel = { module = "com.arkivanov.mvikotlin:mvikotlin-timetravel", version.ref = "timeTravel" }
 coilCompose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
+retrofit = {module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
+retrofitMoshi = {module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofitMoshi"}
 
 [bundles]
 androidTest = [

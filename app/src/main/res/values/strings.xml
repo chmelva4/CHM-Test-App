@@ -8,4 +8,11 @@
     <string name="sport_football">Fotbal</string>
     <string name="sport_hockey">Hokej</string>
     <string name="item_avatar_desc">Logo entity</string>
+    <string name="sport_tennis">Tenis</string>
+    <string name="sport_basketball">Basketbal</string>
+    <string name="sport_american_football">Americký fotbal</string>
+    <string name="sport_baseball">Baseball</string>
+    <string name="sport_handball">Házená</string>
+    <string name="sport_rugby">Ragby</string>
+    <string name="sport_floorball">Florbal</string>
 </resources>

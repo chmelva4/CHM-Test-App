@@ -74,6 +74,8 @@ dependencies {
     ksp(libs.composeDestinationsKsp)
 
     implementation(libs.coilCompose)
+    implementation(libs.retrofit)
+    implementation(libs.retrofitMoshi)
 
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.bundles.androidTest)

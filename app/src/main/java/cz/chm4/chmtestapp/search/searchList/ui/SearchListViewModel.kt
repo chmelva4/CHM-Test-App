@@ -2,8 +2,10 @@ package cz.chm4.chmtestapp.search.searchList.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cz.chm4.chmtestapp.R
-import kotlinx.coroutines.delay
+import cz.chm4.chmtestapp.search.searchList.bl.EntityType
+import cz.chm4.chmtestapp.search.searchList.bl.SearchRepository
+import cz.chm4.chmtestapp.search.searchList.bl.Sport
+import cz.chm4.chmtestapp.search.searchList.network.liveSportApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -11,28 +13,22 @@ import kotlinx.coroutines.launch
 
 class SearchListViewModel: ViewModel() {
 
-    private val _entityFilterFlow = MutableStateFlow(SelectedEntities.ALL)
+    private val repository = SearchRepository(liveSportApi)
+
+    private val _entityFilterFlow = MutableStateFlow(SearchFilter.ALL)
     val entityFilterFlow = _entityFilterFlow.asStateFlow()
 
     private val _searchTextFlow = MutableStateFlow("")
     val searchTextFlow = _searchTextFlow.asStateFlow()
 
 
-    private val _allDataFlow = MutableStateFlow(mapOf<Sport, List<SearchListEntity>>(
-        Sport(1, R.string.sport_football) to listOf<SearchListEntity>(
-            SearchListEntity("1", "EvertonFC", "https://picsum.photos/100/100", 1, 1),
-            SearchListEntity("2", "Wayne Rooney", "https://picsum.photos/100/100", 1, 4),
-        ),
-        Sport(2, R.string.sport_hockey) to listOf(
-            SearchListEntity("3", "HC Slavia Praha", null, 1, 1),
-        )
-    ))
+    private val _allDataFlow = MutableStateFlow<Map<Sport, List<SearchListEntity>>>(mapOf())
 
     val dataFlow = combine(entityFilterFlow, _allDataFlow) { filter, data ->
         when (filter) {
-            SelectedEntities.ALL -> data
-            SelectedEntities.COMPETITIONS -> data.mapValues { it.value.filter { item -> item.type == 1 } }
-            SelectedEntities.PARTICIPANTS -> data.mapValues { it.value.filter { item -> item.type > 1 } }
+            SearchFilter.ALL -> data
+            SearchFilter.COMPETITIONS -> data.mapValues { it.value.filter { item -> item.type == EntityType.COMPETITION } }
+            SearchFilter.PARTICIPANTS -> data.mapValues { it.value.filter { item -> item.type != EntityType.COMPETITION} }
         }
     }
 
@@ -49,7 +45,7 @@ class SearchListViewModel: ViewModel() {
         }
     }
 
-    fun setEntityFilter(selectedEntity: SelectedEntities) {
+    fun setEntityFilter(selectedEntity: SearchFilter) {
         viewModelScope.launch {
             _entityFilterFlow.emit(selectedEntity)
         }
@@ -57,9 +53,11 @@ class SearchListViewModel: ViewModel() {
 
     fun onSearchButtonClicked() {
         viewModelScope.launch {
-            _isLoadingFlow.emit(true)
-            delay(1500)
-            _searchTextFlow.emit("")
+           _isLoadingFlow.emit(true)
+
+            val res = repository.search(searchTextFlow.value, entityFilterFlow.value)
+            val data = res.map { SearchListEntity(it.id, it.name, it.image, it.sport, it.type) }.groupBy { it.sport }
+            _allDataFlow.emit(data)
             _isLoadingFlow.emit(false)
         }
     }

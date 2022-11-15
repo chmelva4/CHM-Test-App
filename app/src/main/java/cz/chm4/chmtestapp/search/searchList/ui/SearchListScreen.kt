@@ -30,10 +30,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,8 +42,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import cz.chm4.chmtestapp.R
+import cz.chm4.chmtestapp.search.searchList.bl.Sport
 import cz.chm4.chmtestapp.theme.spacing
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -110,8 +107,8 @@ fun SearchBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterChips(
-    selectedEntity: SelectedEntities,
-    onEntitySelected: (SelectedEntities) -> Unit,
+    selectedEntity: SearchFilter,
+    onEntitySelected: (SearchFilter) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -126,22 +123,22 @@ fun FilterChips(
 
     Row(modifier = modifier) {
         FilterChip(
-            selected = selectedEntity == SelectedEntities.ALL,
-            onClick = {onEntitySelected(SelectedEntities.ALL)},
+            selected = selectedEntity == SearchFilter.ALL,
+            onClick = {onEntitySelected(SearchFilter.ALL)},
             label = { Text(stringResource(id = R.string.filter_all)) },
             selectedIcon = selectedIcon
         )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
         FilterChip(
-            selected = selectedEntity == SelectedEntities.COMPETITIONS,
-            onClick = {onEntitySelected(SelectedEntities.COMPETITIONS)},
+            selected = selectedEntity == SearchFilter.COMPETITIONS,
+            onClick = {onEntitySelected(SearchFilter.COMPETITIONS)},
             label = { Text(stringResource(id = R.string.filter_competitions)) },
             selectedIcon = selectedIcon
         )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
         FilterChip(
-            selected = selectedEntity == SelectedEntities.PARTICIPANTS,
-            onClick = {onEntitySelected(SelectedEntities.PARTICIPANTS)},
+            selected = selectedEntity == SearchFilter.PARTICIPANTS,
+            onClick = {onEntitySelected(SearchFilter.PARTICIPANTS)},
             label = { Text(stringResource(id = R.string.filter_participants)) },
             selectedIcon = selectedIcon
         )
@@ -158,7 +155,18 @@ fun SearchList(
     LazyColumn(modifier = modifier) {
         data.map {
             item {
-                SportDivider(text = stringResource(id = it.key.name))
+                val sportName = when(it.key) {
+                    Sport.FOOTBALL -> stringResource(id = R.string.sport_football)
+                    Sport.TENNIS -> stringResource(id = R.string.sport_tennis)
+                    Sport.BASKETBALL -> stringResource(id = R.string.sport_basketball)
+                    Sport.HOCKEY -> stringResource(id = R.string.sport_hockey)
+                    Sport.AMERICAN_FOOTBALL -> stringResource(id = R.string.sport_american_football)
+                    Sport.BASEBALL -> stringResource(id = R.string.sport_baseball)
+                    Sport.HANDBALL -> stringResource(id = R.string.sport_handball)
+                    Sport.RUGBY -> stringResource(id = R.string.sport_rugby)
+                    Sport.FLOORBALL -> stringResource(id = R.string.sport_floorball)
+                }
+                SportDivider(text = sportName)
             }
             items(it.value) { item ->
                 SportListItem(item = item, onItemClick = onItemClick)
