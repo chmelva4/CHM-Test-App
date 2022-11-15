@@ -26,6 +26,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import cz.chm4.chmtestapp.R
 import cz.chm4.chmtestapp.search.common.bl.Sport
@@ -47,7 +49,7 @@ import cz.chm4.chmtestapp.theme.spacing
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun SearchListScreen() {
+fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHostState) {
 
     val viewModel: SearchListViewModel = viewModel()
 

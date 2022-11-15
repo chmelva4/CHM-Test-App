@@ -70,8 +70,6 @@ dependencies {
     implementation(libs.bundles.compose)
     //implementation(libs.timeTravel)
     implementation(libs.timber)
-    implementation(libs.composeDestinationsCore)
-    ksp(libs.composeDestinationsKsp)
 
     implementation(libs.coilCompose)
     implementation(libs.retrofit)
