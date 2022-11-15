@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Divider
@@ -33,10 +35,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -89,6 +94,7 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
 }
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
     searchText: String,
@@ -98,7 +104,20 @@ fun SearchBar(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        OutlinedTextField(value = searchText, onValueChange = onSearchTextChanged, maxLines = 1, modifier = Modifier.weight(1f))
+        val keyboardController = LocalSoftwareKeyboardController.current
+        OutlinedTextField(
+            value = searchText,
+            onValueChange = onSearchTextChanged,
+            maxLines = 1,
+            modifier = Modifier.weight(1f),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    keyboardController?.hide()
+                    onSearchClicked()
+                }
+            )
+        )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
         OutlinedButton(onClick = onSearchClicked, enabled = isSearchBtnEnabled) {
             Text(text = stringResource(id = R.string.search))
