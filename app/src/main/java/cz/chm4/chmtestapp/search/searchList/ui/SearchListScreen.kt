@@ -22,6 +22,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -39,42 +40,47 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import cz.chm4.chmtestapp.R
 import cz.chm4.chmtestapp.theme.spacing
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun SearchListScreen() {
 
+    val viewModel: SearchListViewModel = viewModel()
+
     val scope = rememberCoroutineScope()
 
-    var searchText by remember { mutableStateOf("Search Text") }
-    val isSearchBtnEnabled by remember { mutableStateOf(true) }
-    var selectedEntity by remember { mutableStateOf(SelectedEntities.ALL) }
+    val searchText by viewModel.searchTextFlow.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoadingFlow.collectAsStateWithLifecycle()
 
-    val data = mapOf<Sport, List<SearchListEntity>>(
-        Sport(1, R.string.sport_football) to listOf<SearchListEntity>(
-            SearchListEntity("1", "EvertonFC", "https://picsum.photos/100/100", 1, 1),
-            SearchListEntity("2", "Wayne Rooney", "https://picsum.photos/100/100", 1, 4),
-        ),
-        Sport(2, R.string.sport_hockey) to listOf(
-            SearchListEntity("3", "HC Slavia Praha", null, 1, 1),
-        )
-    )
+    val selectedEntity by viewModel.entityFilterFlow.collectAsStateWithLifecycle()
+
+    val data by viewModel.dataFlow.collectAsStateWithLifecycle(emptyMap())
+
 
     Column(modifier = Modifier.padding(16.dp)) {
         SearchBar(
             searchText = searchText,
-            onSearchTextChanged = {scope.launch { searchText = it }},
-            isSearchBtnEnabled = isSearchBtnEnabled,
-            onSearchClicked = {},
+            onSearchTextChanged = viewModel::setSearchText,
+            isSearchBtnEnabled = !isLoading && searchText.isNotBlank(),
+            onSearchClicked = viewModel::onSearchButtonClicked,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         Divider()
 //        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-        FilterChips(selectedEntity = selectedEntity, onEntitySelected = {selectedEntity = it}, Modifier.fillMaxWidth())
+        FilterChips(selectedEntity = selectedEntity, onEntitySelected = viewModel::setEntityFilter, Modifier.fillMaxWidth())
+
+        if (isLoading) {
+            LinearProgressIndicator(Modifier.fillMaxWidth())
+        }
+
         SearchList(data = data, onItemClick = {}, modifier = Modifier
             .fillMaxWidth()
             .weight(1f))
