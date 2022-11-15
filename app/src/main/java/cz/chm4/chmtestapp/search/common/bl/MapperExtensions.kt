@@ -1,5 +1,6 @@
 package cz.chm4.chmtestapp.search.common.bl
 
+import android.util.Log
 import cz.chm4.chmtestapp.search.common.data.network.IdObject
 import cz.chm4.chmtestapp.search.common.data.network.SearchEntity
 
@@ -8,6 +9,7 @@ fun IdObject.toSport(): Sport {
 }
 
 fun IdObject.toGender(): Gender {
+    if (id > 2) return Gender.MIX
     return Gender.values()[id - 1]
 }
 
@@ -17,7 +19,6 @@ fun IdObject.toEntityType(): EntityType {
 
 fun SearchEntity.toSearchEntityBl(): SearchEntityBl {
     val img = images.find { it.variantTypeId == 15 }?.path
-
     val imgUrl = if (img != null) "${SearchEntity.BASE_IMG_URL}/$img" else null
 
     return SearchEntityBl(id, name, gender.toGender(), type.toEntityType(), sport.toSport(), defaultCountry.name, imgUrl)
