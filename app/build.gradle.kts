@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
+    id("kotlin-kapt")
+    alias(libs.plugins.hilt)
 }
 
 val packageName = "cz.chm4.chmtestapp"
@@ -75,7 +77,15 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofitMoshi)
 
+    implementation(libs.hilt)
+    kapt(libs.hiltCompiler)
+    implementation(libs.hiltNavigationCompose)
+
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.bundles.androidTest)
     debugImplementation(libs.bundles.debug)
+}
+
+kapt {
+    correctErrorTypes = true
 }

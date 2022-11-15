@@ -24,6 +24,9 @@ timber = "5.0.1"
 coilCompose = "2.2.2"
 retrofit = "2.9.0"
 retrofitMoshi = "2.9.0"
+hilt = "2.44.2"
+hiltNavigationCompose = "1.0.0"
+kapt = "1.7.21"
 
 [libraries]
 activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -46,6 +49,9 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coilCompose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
 retrofit = {module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
 retrofitMoshi = {module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofitMoshi"}
+hilt = {module = "com.google.dagger:hilt-android", version.ref = "hilt"}
+hiltCompiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt"}
+hiltNavigationCompose = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose"}
 
 [bundles]
 androidTest = [
@@ -79,5 +85,6 @@ android = { id = "com.android.application", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "kotlin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroid" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = {id = "com.google.dagger.hilt.android", version.ref ="hilt"}
 #versionCatalogCore = { id = "com.github.ben-manes.versions", version.ref = "versionCatalogCore" }
 #versionCatalogUpdate = { id = "nl.littlerobots.version-catalog-update", version.ref = "versionCatalogUpdate" }

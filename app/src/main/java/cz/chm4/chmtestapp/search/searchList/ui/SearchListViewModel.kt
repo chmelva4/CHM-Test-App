@@ -5,15 +5,17 @@ import androidx.lifecycle.viewModelScope
 import cz.chm4.chmtestapp.search.common.bl.EntityType
 import cz.chm4.chmtestapp.search.common.bl.SearchRepository
 import cz.chm4.chmtestapp.search.common.bl.Sport
-import cz.chm4.chmtestapp.search.common.data.network.liveSportApi
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchListViewModel: ViewModel() {
-
-    private val repository = SearchRepository(liveSportApi)
+@HiltViewModel
+class SearchListViewModel @Inject constructor(
+    private val repository: SearchRepository
+): ViewModel() {
 
     private val _entityFilterFlow = MutableStateFlow(SearchFilter.ALL)
     val entityFilterFlow = _entityFilterFlow.asStateFlow()

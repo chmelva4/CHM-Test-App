@@ -43,6 +43,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -56,7 +57,7 @@ import cz.chm4.chmtestapp.theme.spacing
 @Composable
 fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHostState) {
 
-    val viewModel: SearchListViewModel = viewModel()
+    val viewModel: SearchListViewModel = hiltViewModel()
 
     val scope = rememberCoroutineScope()
 

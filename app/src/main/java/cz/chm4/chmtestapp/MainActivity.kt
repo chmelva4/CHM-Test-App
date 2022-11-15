@@ -15,7 +15,9 @@ import androidx.navigation.compose.rememberNavController
 import cz.chm4.chmtestapp.navigation.CHMTestAppNavHost
 
 import cz.chm4.chmtestapp.theme.CHMTestAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
