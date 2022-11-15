@@ -154,20 +154,21 @@ fun SearchList(
 
     LazyColumn(modifier = modifier) {
         data.map {
-            item {
-                val sportName = when(it.key) {
-                    Sport.FOOTBALL -> stringResource(id = R.string.sport_football)
-                    Sport.TENNIS -> stringResource(id = R.string.sport_tennis)
-                    Sport.BASKETBALL -> stringResource(id = R.string.sport_basketball)
-                    Sport.HOCKEY -> stringResource(id = R.string.sport_hockey)
-                    Sport.AMERICAN_FOOTBALL -> stringResource(id = R.string.sport_american_football)
-                    Sport.BASEBALL -> stringResource(id = R.string.sport_baseball)
-                    Sport.HANDBALL -> stringResource(id = R.string.sport_handball)
-                    Sport.RUGBY -> stringResource(id = R.string.sport_rugby)
-                    Sport.FLOORBALL -> stringResource(id = R.string.sport_floorball)
+            if (it.value.isNotEmpty())
+                item {
+                    val sportName = when(it.key) {
+                        Sport.FOOTBALL -> stringResource(id = R.string.sport_football)
+                        Sport.TENNIS -> stringResource(id = R.string.sport_tennis)
+                        Sport.BASKETBALL -> stringResource(id = R.string.sport_basketball)
+                        Sport.HOCKEY -> stringResource(id = R.string.sport_hockey)
+                        Sport.AMERICAN_FOOTBALL -> stringResource(id = R.string.sport_american_football)
+                        Sport.BASEBALL -> stringResource(id = R.string.sport_baseball)
+                        Sport.HANDBALL -> stringResource(id = R.string.sport_handball)
+                        Sport.RUGBY -> stringResource(id = R.string.sport_rugby)
+                        Sport.FLOORBALL -> stringResource(id = R.string.sport_floorball)
+                    }
+                    SportDivider(text = sportName)
                 }
-                SportDivider(text = sportName)
-            }
             items(it.value) { item ->
                 SportListItem(item = item, onItemClick = onItemClick)
             }
