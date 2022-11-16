@@ -27,6 +27,9 @@ retrofitMoshi = "2.9.0"
 hilt = "2.44.2"
 hiltNavigationCompose = "1.0.0"
 kapt = "1.7.21"
+coroutinesTest = "1.6.4"
+mockk = "1.13.2"
+
 
 [libraries]
 activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -52,6 +55,8 @@ retrofitMoshi = {module = "com.squareup.retrofit2:converter-moshi", version.ref 
 hilt = {module = "com.google.dagger:hilt-android", version.ref = "hilt"}
 hiltCompiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt"}
 hiltNavigationCompose = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose"}
+coroutinesTest = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest"}
+mockk = {module = "io.mockk:mockk", version.ref = "mockk"}
 
 [bundles]
 androidTest = [
@@ -78,6 +83,8 @@ debug = [
 ]
 test = [
     "jUnit",
+    "coroutinesTest",
+    "mockk",
 ]
 
 [plugins]
