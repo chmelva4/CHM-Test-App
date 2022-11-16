@@ -6,7 +6,9 @@ import cz.chm4.chmtestapp.search.common.bl.EntityType
 import cz.chm4.chmtestapp.search.common.bl.SearchRepository
 import cz.chm4.chmtestapp.search.common.bl.Sport
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -37,8 +39,8 @@ class SearchListViewModel @Inject constructor(
     private val _isLoadingFlow = MutableStateFlow(false)
     val isLoadingFlow = _isLoadingFlow.asStateFlow()
 
-    private val _hasErrorFlow = MutableStateFlow(false)
-    val hasErrorFlow = _hasErrorFlow.asStateFlow()
+    private val _hasErrorFlow = MutableSharedFlow<Unit>()
+    val hasErrorFlow = _hasErrorFlow.asSharedFlow()
 
 
     fun setSearchText(text: String) {
@@ -56,10 +58,13 @@ class SearchListViewModel @Inject constructor(
     fun onSearchButtonClicked() {
         viewModelScope.launch {
            _isLoadingFlow.emit(true)
-
-            val res = repository.search(searchTextFlow.value, entityFilterFlow.value)
-            val data = res.map { SearchListEntity(it.id, it.name, it.image, it.sport, it.type) }.groupBy { it.sport }
-            _allDataFlow.emit(data)
+            try {
+                val res = repository.search(searchTextFlow.value, entityFilterFlow.value)
+                val data = res.map { SearchListEntity(it.id, it.name, it.image, it.sport, it.type) }.groupBy { it.sport }
+                _allDataFlow.emit(data)
+            } catch (e: Exception) {
+                _hasErrorFlow.emit(Unit)
+            }
             _isLoadingFlow.emit(false)
         }
     }

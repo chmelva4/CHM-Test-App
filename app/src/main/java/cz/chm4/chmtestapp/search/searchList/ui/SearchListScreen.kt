@@ -29,9 +29,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -39,6 +41,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -52,21 +55,31 @@ import coil.compose.AsyncImage
 import cz.chm4.chmtestapp.R
 import cz.chm4.chmtestapp.search.common.bl.Sport
 import cz.chm4.chmtestapp.theme.spacing
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHostState) {
-
     val viewModel: SearchListViewModel = hiltViewModel()
-
-    val scope = rememberCoroutineScope()
+    val ctx = LocalContext.current
 
     val searchText by viewModel.searchTextFlow.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoadingFlow.collectAsStateWithLifecycle()
-
     val selectedEntity by viewModel.entityFilterFlow.collectAsStateWithLifecycle()
-
     val data by viewModel.dataFlow.collectAsStateWithLifecycle(emptyMap())
+
+    LaunchedEffect(true) {
+        this.launch {
+            viewModel.hasErrorFlow.collect {
+                val result = snackbarHostState.showSnackbar(
+                    ctx.getString(R.string.search_error), ctx.getString(R.string.action_refresh)
+                )
+                if (result == SnackbarResult.ActionPerformed) {
+                    viewModel.onSearchButtonClicked()
+                }
+            }
+        }
+    }
 
 
     Column(modifier = Modifier.padding(16.dp)) {
@@ -79,7 +92,6 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         Divider()
-//        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         FilterChips(selectedEntity = selectedEntity, onEntitySelected = viewModel::setEntityFilter, Modifier.fillMaxWidth())
 
         if (isLoading) {
@@ -120,7 +132,10 @@ fun SearchBar(
             )
         )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
-        OutlinedButton(onClick = onSearchClicked, enabled = isSearchBtnEnabled) {
+        OutlinedButton(onClick = {
+             keyboardController?.hide()
+             onSearchClicked()
+        }, enabled = isSearchBtnEnabled) {
             Text(text = stringResource(id = R.string.search))
         }
     }

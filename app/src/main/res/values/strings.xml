@@ -15,4 +15,6 @@
     <string name="sport_handball">Házená</string>
     <string name="sport_rugby">Ragby</string>
     <string name="sport_floorball">Florbal</string>
+    <string name="search_error">Jejda, něco se pokazilo!</string>
+    <string name="action_refresh">Obnovit</string>
 </resources>
