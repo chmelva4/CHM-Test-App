@@ -1,12 +1,20 @@
 package cz.chm4.chmtestapp.search.searchList.ui
 
+import cz.chm4.chmtestapp.search.common.bl.EntityType
+import cz.chm4.chmtestapp.search.common.bl.Gender
+import cz.chm4.chmtestapp.search.common.bl.SearchEntityBl
 import cz.chm4.chmtestapp.search.common.bl.SearchRepository
+import cz.chm4.chmtestapp.search.common.bl.Sport
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -28,10 +36,6 @@ class SearchListViewModelTest {
     fun setUp() {
         repoMock = mockk<SearchRepository>()
         searchListViewModel = SearchListViewModel(repoMock)
-    }
-
-    @After
-    fun tearDown() {
     }
 
     @Test
@@ -62,20 +66,130 @@ class SearchListViewModelTest {
         job.cancel()
     }
 
+    @Test
     fun `properly displays loading during submission`() = runTest {
-        val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.isLoadingFlow.collect{}}
-//        every { repoMock.search(any) }
-        
+        val loadingStates = mutableListOf<Boolean>()
+        val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.isLoadingFlow.collect {loadingStates.add(it)}}
+        coEvery { repoMock.search(any()) } returns emptyList()
 
-        assertEquals(false, searchListViewModel.entityFilterFlow.value)
+        searchListViewModel.onSearchButtonClicked()
+        advanceUntilIdle()
+
+        assertEquals(3, loadingStates.size)
+        assertArrayEquals(booleanArrayOf(false, true, false), loadingStates.toBooleanArray())
+
+        job.cancel()
+    }
+
+    @Test
+    fun `properly emits error event`() = runTest {
+        var errorCount = 0
+        val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.hasErrorFlow.collect {errorCount++}}
+        coEvery { repoMock.search(any()) } throws  Exception("Network error")
+
+        assertEquals(0, errorCount)
+
+        searchListViewModel.onSearchButtonClicked()
+        advanceUntilIdle()
+        assertEquals(1, errorCount)
+
+        searchListViewModel.onSearchButtonClicked()
+        advanceUntilIdle()
+        assertEquals(2, errorCount)
+
+        job.cancel()
+    }
+
+    @Test
+    fun `properly calls search with search text`() = runTest {
+        coEvery { repoMock.search(any()) } returns emptyList()
+
+        searchListViewModel.setSearchText("Wimbledon")
+
+        searchListViewModel.onSearchButtonClicked()
+        advanceUntilIdle()
+
+        coVerify { repoMock.search("Wimbledon") }
+    }
+
+    @Test
+    fun `properly parses data`() = runTest {
+        val player = SearchEntityBl("1", "name1", Gender.MEN, EntityType.SINGLE_PLAYER, Sport.FOOTBALL, "country1", null)
+        coEvery { repoMock.search(any()) } returns listOf(player)
+        var state: Map<Sport, List<SearchListEntity>> = emptyMap()
+        val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.dataFlow.collect {state = it}}
+
+        assertTrue(state.isEmpty())
+
+        searchListViewModel.onSearchButtonClicked()
+        advanceUntilIdle()
+
+        val result = state[Sport.FOOTBALL]?.get(0)
+
+        assertEquals(player.id, result?.id)
+        assertEquals(player.name, result?.name)
+        assertEquals(player.type, result?.type)
+        assertEquals(player.sport, result?.sport)
+        assertEquals(player.image, result?.avatarUrl)
+
+        job.cancel()
+    }
+
+    @Test
+    fun `properly groups data by sport`() = runTest {
+        val multiSportData = listOf(
+            SearchEntityBl("1", "name1", Gender.MEN, EntityType.COMPETITION, Sport.FOOTBALL, "country1", null),
+            SearchEntityBl("2", "name2", Gender.MEN, EntityType.TEAM, Sport.HOCKEY, "country1", null),
+        )
+
+        coEvery { repoMock.search(any()) } returns multiSportData
+        var state: Map<Sport, List<SearchListEntity>> = emptyMap()
+        val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.dataFlow.collect {state = it}}
+
+        searchListViewModel.onSearchButtonClicked()
+        advanceUntilIdle()
+
+        val player1 = state[Sport.FOOTBALL]?.get(0)
+        val player2 = state[Sport.HOCKEY]?.get(0)
+
+        assertEquals(2, state.keys.size)
+        assertEquals(multiSportData[0].id, player1?.id)
+        assertEquals(multiSportData[1].id, player2?.id)
+
+        job.cancel()
+    }
+
+    @Test
+    fun `properly filters data by entity type`() = runTest {
+        val singleSportData = listOf(
+            SearchEntityBl("1", "name1", Gender.MEN, EntityType.COMPETITION, Sport.FOOTBALL, "country1", null),
+            SearchEntityBl("2", "name2", Gender.MEN, EntityType.TEAM, Sport.FOOTBALL, "country1", null),
+            SearchEntityBl("3", "name3", Gender.MEN, EntityType.TEAM_PLAYER, Sport.FOOTBALL, "country1", null),
+            SearchEntityBl("4", "name4", Gender.MEN, EntityType.SINGLE_PLAYER, Sport.FOOTBALL, "country1", null),
+        )
+        coEvery { repoMock.search(any()) } returns singleSportData
+        var state: Map<Sport, List<SearchListEntity>> = emptyMap()
+        val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.dataFlow.collect {state = it}}
+
+        searchListViewModel.onSearchButtonClicked()
+        advanceUntilIdle()
+
+        var players = state[Sport.FOOTBALL]
+        assertEquals(4, players?.size)
 
         searchListViewModel.setEntityFilter(SearchFilter.COMPETITIONS)
         advanceUntilIdle()
-        assertEquals(SearchFilter.COMPETITIONS, searchListViewModel.entityFilterFlow.value)
+        players = state[Sport.FOOTBALL]
+        assertEquals(1, players?.size)
+        assertEquals("1", players?.get(0)?.id)
 
         searchListViewModel.setEntityFilter(SearchFilter.PARTICIPANTS)
         advanceUntilIdle()
-        assertEquals(SearchFilter.PARTICIPANTS, searchListViewModel.entityFilterFlow.value)
+        players = state[Sport.FOOTBALL]
+        assertEquals(3, players?.size)
+        assertEquals("2", players?.get(0)?.id)
+        assertEquals("3", players?.get(1)?.id)
+        assertEquals("4", players?.get(2)?.id)
 
         job.cancel()
     }
