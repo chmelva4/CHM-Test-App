@@ -59,7 +59,7 @@ class SearchListViewModel @Inject constructor(
         viewModelScope.launch {
            _isLoadingFlow.emit(true)
             try {
-                val res = repository.search(searchTextFlow.value, entityFilterFlow.value)
+                val res = repository.search(searchTextFlow.value)
                 val data = res.map { SearchListEntity(it.id, it.name, it.image, it.sport, it.type) }.groupBy { it.sport }
                 _allDataFlow.emit(data)
             } catch (e: Exception) {

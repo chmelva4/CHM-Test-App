@@ -8,7 +8,7 @@ class SearchRepository(
 ) {
 
 
-    suspend fun search(searchQuery: String, searchFilter: SearchFilter): List<SearchEntityBl> {
+    suspend fun search(searchQuery: String): List<SearchEntityBl> {
         return livesportSearchApi.search(searchQuery).map { it.toSearchEntityBl() }
     }
 }
