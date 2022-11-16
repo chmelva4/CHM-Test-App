@@ -21,3 +21,8 @@ fun SearchEntityDisplay(entity: SearchEntityBl) {
         }
     }
 }
+
+@Composable
+fun EntityImage(imageUrl: String?) {
+
+}
