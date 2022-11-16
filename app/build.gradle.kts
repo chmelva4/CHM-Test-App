@@ -81,6 +81,9 @@ dependencies {
     kapt(libs.hiltCompiler)
     implementation(libs.hiltNavigationCompose)
 
+    implementation(libs.bundles.room)
+    ksp(libs.roomCompiler)
+
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.bundles.androidTest)
     debugImplementation(libs.bundles.debug)

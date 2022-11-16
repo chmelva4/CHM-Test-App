@@ -29,6 +29,7 @@ hiltNavigationCompose = "1.0.0"
 kapt = "1.7.21"
 coroutinesTest = "1.6.4"
 mockk = "1.13.2"
+room = "2.4.3"
 
 
 [libraries]
@@ -57,6 +58,9 @@ hiltCompiler = {module = "com.google.dagger:hilt-android-compiler", version.ref 
 hiltNavigationCompose = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose"}
 coroutinesTest = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest"}
 mockk = {module = "io.mockk:mockk", version.ref = "mockk"}
+room = { module = "androidx.room:room-runtime", version.ref = "room"}
+roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room"}
+roomKtx = { module = "androidx.room:room-ktx", version.ref = "room"}
 
 [bundles]
 androidTest = [
@@ -77,6 +81,12 @@ compose = [
     "material",
     "material3",
 ]
+
+room = [
+    "room",
+    "roomKtx"
+]
+
 debug = [
     "composeUiTestManifest",
     "composeUiTooling",
