@@ -1,5 +1,6 @@
 package cz.chm4.chmtestapp.search.searchList.ui
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,6 +34,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,26 +51,37 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import cz.chm4.chmtestapp.R
 import cz.chm4.chmtestapp.navigation.Screens
 import cz.chm4.chmtestapp.search.common.bl.Sport
+import cz.chm4.chmtestapp.search.searchList.data.sharedPrefs.SearchListSharedPrefConstants
 import cz.chm4.chmtestapp.theme.spacing
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHostState) {
-    val viewModel: SearchListViewModel = hiltViewModel()
+fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHostState, viewModel: SearchListViewModel = hiltViewModel()) {
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
 
     val searchText by viewModel.searchTextFlow.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoadingFlow.collectAsStateWithLifecycle()
-    val selectedEntity by viewModel.entityFilterFlow.collectAsStateWithLifecycle()
+    val activeFilter by viewModel.entityFilterFlow.collectAsStateWithLifecycle()
     val data by viewModel.dataFlow.collectAsStateWithLifecycle(emptyMap())
+
+    DisposableEffect(viewModel) {
+        val sp = ctx.getSharedPreferences(SearchListSharedPrefConstants.FILE_NAME, Context.MODE_PRIVATE)
+        viewModel.setSearchText(sp.getString(SearchListSharedPrefConstants.SEARCH_TEXT_KEY, "") ?: "")
+        viewModel.setEntityFilter(SearchFilter.valueOf(sp.getString(SearchListSharedPrefConstants.FILTER_KEY, SearchFilter.ALL.toString()) ?: SearchFilter.ALL.toString()))
+        onDispose {
+            val editor = sp.edit()
+            editor.putString(SearchListSharedPrefConstants.SEARCH_TEXT_KEY, searchText)
+            editor.putString(SearchListSharedPrefConstants.FILTER_KEY, activeFilter.toString())
+            editor.apply()
+        }
+    }
 
     LaunchedEffect(true) {
         this.launch {
@@ -93,7 +106,7 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         Divider()
-        FilterChips(selectedEntity = selectedEntity, onEntitySelected = viewModel::setEntityFilter, Modifier.fillMaxWidth())
+        FilterChips(selectedEntity = activeFilter, onEntitySelected = viewModel::setEntityFilter, Modifier.fillMaxWidth())
 
         if (isLoading) {
             LinearProgressIndicator(Modifier.fillMaxWidth())
@@ -104,8 +117,8 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
             onItemClick = {
                 scope.launch { navController.navigate(Screens.SearchItemDetail.route.replace("{id}", it.id)) }
             }, modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f))
+                .fillMaxWidth()
+                .weight(1f))
     }
 }
 
