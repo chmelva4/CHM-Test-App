@@ -53,6 +53,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import cz.chm4.chmtestapp.R
+import cz.chm4.chmtestapp.navigation.Screens
 import cz.chm4.chmtestapp.search.common.bl.Sport
 import cz.chm4.chmtestapp.theme.spacing
 import kotlinx.coroutines.launch
@@ -62,6 +63,7 @@ import kotlinx.coroutines.launch
 fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHostState) {
     val viewModel: SearchListViewModel = hiltViewModel()
     val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     val searchText by viewModel.searchTextFlow.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoadingFlow.collectAsStateWithLifecycle()
@@ -81,7 +83,6 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
         }
     }
 
-
     Column(modifier = Modifier.padding(16.dp)) {
         SearchBar(
             searchText = searchText,
@@ -98,14 +99,15 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
             LinearProgressIndicator(Modifier.fillMaxWidth())
         }
 
-        SearchList(data = data, onItemClick = {}, modifier = Modifier
+        SearchList(
+            data = data,
+            onItemClick = {
+                scope.launch { navController.navigate(Screens.SearchItemDetail.route.replace("{id}", it.id)) }
+            }, modifier = Modifier
             .fillMaxWidth()
             .weight(1f))
     }
-
-    
 }
-
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -156,7 +158,6 @@ fun FilterChips(
             modifier = Modifier.size(FilterChipDefaults.IconSize)
         )
     }
-
 
     Row(modifier = modifier) {
         FilterChip(
@@ -211,7 +212,6 @@ fun SearchList(
             }
         }
     }
-
 }
 
 @Composable
