@@ -1,5 +1,6 @@
 package cz.chm4.chmtestapp.search.searchList.ui
 
+import cz.chm4.chmtestapp.MainCoroutineRule
 import cz.chm4.chmtestapp.search.common.bl.EntityType
 import cz.chm4.chmtestapp.search.common.bl.Gender
 import cz.chm4.chmtestapp.search.common.bl.SearchEntityBl

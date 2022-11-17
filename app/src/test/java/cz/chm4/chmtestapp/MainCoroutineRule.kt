@@ -1,4 +1,4 @@
-package cz.chm4.chmtestapp.search.searchList.ui
+package cz.chm4.chmtestapp
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
