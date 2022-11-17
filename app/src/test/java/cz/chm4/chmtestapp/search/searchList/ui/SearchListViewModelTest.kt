@@ -11,6 +11,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -31,10 +33,13 @@ class SearchListViewModelTest {
 
     private lateinit var repoMock: SearchRepository
     private lateinit var searchListViewModel: SearchListViewModel
+    private lateinit var dataFlow: MutableStateFlow<List<SearchEntityBl>>
 
     @Before
     fun setUp() {
         repoMock = mockk<SearchRepository>()
+        dataFlow = MutableStateFlow(emptyList())
+        every { repoMock.getAll() } returns dataFlow
         searchListViewModel = SearchListViewModel(repoMock)
     }
 
@@ -70,7 +75,6 @@ class SearchListViewModelTest {
     fun `properly displays loading during submission`() = runTest {
         val loadingStates = mutableListOf<Boolean>()
         val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.isLoadingFlow.collect {loadingStates.add(it)}}
-        coEvery { repoMock.search(any()) } returns emptyList()
 
         searchListViewModel.onSearchButtonClicked()
         advanceUntilIdle()
@@ -102,8 +106,6 @@ class SearchListViewModelTest {
 
     @Test
     fun `properly calls search with search text`() = runTest {
-        coEvery { repoMock.search(any()) } returns emptyList()
-
         searchListViewModel.setSearchText("Wimbledon")
 
         searchListViewModel.onSearchButtonClicked()
@@ -115,13 +117,12 @@ class SearchListViewModelTest {
     @Test
     fun `properly parses data`() = runTest {
         val player = SearchEntityBl("1", "name1", Gender.MEN, EntityType.SINGLE_PLAYER, Sport.FOOTBALL, "country1", null)
-        coEvery { repoMock.search(any()) } returns listOf(player)
         var state: Map<Sport, List<SearchListEntity>> = emptyMap()
         val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.dataFlow.collect {state = it}}
 
         assertTrue(state.isEmpty())
 
-        searchListViewModel.onSearchButtonClicked()
+        dataFlow.emit(listOf(player))
         advanceUntilIdle()
 
         val result = state[Sport.FOOTBALL]?.get(0)
@@ -142,11 +143,9 @@ class SearchListViewModelTest {
             SearchEntityBl("2", "name2", Gender.MEN, EntityType.TEAM, Sport.HOCKEY, "country1", null),
         )
 
-        coEvery { repoMock.search(any()) } returns multiSportData
         var state: Map<Sport, List<SearchListEntity>> = emptyMap()
         val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.dataFlow.collect {state = it}}
-
-        searchListViewModel.onSearchButtonClicked()
+        dataFlow.emit(multiSportData)
         advanceUntilIdle()
 
         val player1 = state[Sport.FOOTBALL]?.get(0)
@@ -167,11 +166,10 @@ class SearchListViewModelTest {
             SearchEntityBl("3", "name3", Gender.MEN, EntityType.TEAM_PLAYER, Sport.FOOTBALL, "country1", null),
             SearchEntityBl("4", "name4", Gender.MEN, EntityType.SINGLE_PLAYER, Sport.FOOTBALL, "country1", null),
         )
-        coEvery { repoMock.search(any()) } returns singleSportData
         var state: Map<Sport, List<SearchListEntity>> = emptyMap()
         val job = launch( UnconfinedTestDispatcher()) {searchListViewModel.dataFlow.collect {state = it}}
 
-        searchListViewModel.onSearchButtonClicked()
+        dataFlow.emit(singleSportData)
         advanceUntilIdle()
 
         var players = state[Sport.FOOTBALL]
