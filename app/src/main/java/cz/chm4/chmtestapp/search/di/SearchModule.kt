@@ -4,6 +4,8 @@ import cz.chm4.chmtestapp.database.AppDatabase
 import cz.chm4.chmtestapp.search.common.bl.SearchRepository
 import cz.chm4.chmtestapp.search.common.data.database.SearchResultsDao
 import cz.chm4.chmtestapp.search.common.data.network.LivesportSearchApi
+import cz.chm4.chmtestapp.search.searchDetail.bl.SearchDetailRepository
+import cz.chm4.chmtestapp.search.searchDetail.data.database.SearchDetailDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,5 +38,11 @@ object SearchModule {
     @Provides
     fun provideSearchRepository(livesportSearchApi: LivesportSearchApi, searchResultsDao: SearchResultsDao): SearchRepository = SearchRepository(livesportSearchApi, searchResultsDao)
 
+    @Singleton
+    @Provides
+    fun provideSearchDetailDao(database: AppDatabase) = database.searchDetailDao()
 
+    @Singleton
+    @Provides
+    fun provideSearchDetailRepository(searchDetailDao: SearchDetailDao) = SearchDetailRepository(searchDetailDao)
 }

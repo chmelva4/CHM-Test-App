@@ -8,4 +8,8 @@ data class SearchEntityBl(
     val sport: Sport,
     val country: String,
     val image: String?,
-)
+) {
+    companion object {
+        val EmptyEntity = SearchEntityBl("", "", Gender.MEN, EntityType.SINGLE_PLAYER, Sport.FOOTBALL, "", null)
+    }
+}

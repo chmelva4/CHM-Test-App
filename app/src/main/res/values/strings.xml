@@ -17,4 +17,13 @@
     <string name="sport_floorball">Florbal</string>
     <string name="search_error">Jejda, něco se pokazilo!</string>
     <string name="action_refresh">Obnovit</string>
+    <string name="type_competition">Soutěž</string>
+    <string name="type_team">Tým</string>
+    <string name="type_player">Hráč</string>
+    <string name="type_team_player">Hráč v týmu</string>
+    <string name="gender_men">Muži</string>
+    <string name="gender_women">Ženy</string>
+    <string name="gender_mix">Mix</string>
+    <string name="label_category">Kategorie:</string>
+    <string name="label_country">Země původu:</string>
 </resources>
