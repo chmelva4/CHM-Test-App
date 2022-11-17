@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +27,9 @@ class SearchListViewModel @Inject constructor(
     val searchTextFlow = _searchTextFlow.asStateFlow()
 
 
-    private val _allDataFlow = MutableStateFlow<Map<Sport, List<SearchListEntity>>>(mapOf())
+    private val _allDataFlow = repository.getAll().map { dataList ->
+        dataList.map { item -> SearchListEntity(item.id, item.name, item.image, item.sport, item.type) }.groupBy { it.sport }
+    }
 
     val dataFlow = combine(entityFilterFlow, _allDataFlow) { filter, data ->
         when (filter) {
@@ -59,15 +62,11 @@ class SearchListViewModel @Inject constructor(
         viewModelScope.launch {
            _isLoadingFlow.emit(true)
             try {
-                val res = repository.search(searchTextFlow.value)
-                val data = res.map { SearchListEntity(it.id, it.name, it.image, it.sport, it.type) }.groupBy { it.sport }
-                _allDataFlow.emit(data)
+               repository.search(searchTextFlow.value)
             } catch (e: Exception) {
                 _hasErrorFlow.emit(Unit)
             }
             _isLoadingFlow.emit(false)
         }
     }
-
-
 }

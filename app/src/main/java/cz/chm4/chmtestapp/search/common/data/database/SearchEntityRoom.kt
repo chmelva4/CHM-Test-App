@@ -12,4 +12,6 @@ data class SearchEntityRoom(
     val sport: String,
     val country: String,
     val image: String?,
-)
+) {
+    companion object {}
+}

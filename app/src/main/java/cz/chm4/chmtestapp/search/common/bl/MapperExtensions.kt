@@ -1,6 +1,7 @@
 package cz.chm4.chmtestapp.search.common.bl
 
 import android.util.Log
+import cz.chm4.chmtestapp.search.common.data.database.SearchEntityRoom
 import cz.chm4.chmtestapp.search.common.data.network.IdObject
 import cz.chm4.chmtestapp.search.common.data.network.SearchEntity
 
@@ -22,5 +23,15 @@ fun SearchEntity.toSearchEntityBl(): SearchEntityBl {
     val imgUrl = if (img != null) "${SearchEntity.BASE_IMG_URL}/$img" else null
 
     return SearchEntityBl(id, name, gender.toGender(), type.toEntityType(), sport.toSport(), defaultCountry.name, imgUrl)
+}
+
+fun SearchEntityRoom.toSearchEntityBl(): SearchEntityBl {
+    return SearchEntityBl(id, name, Gender.valueOf(gender), EntityType.valueOf(type), Sport.valueOf(sport), country, image)
+}
+
+fun SearchEntityRoom.Companion.fromSearchEntityBl(item: SearchEntityBl): SearchEntityRoom {
+    return SearchEntityRoom(
+        item.id, item.name, item.gender.toString(), item.type.toString(), item.sport.toString(), item.country, item.image
+    )
 }
 
