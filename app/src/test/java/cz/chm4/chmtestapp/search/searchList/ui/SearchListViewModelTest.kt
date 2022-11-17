@@ -3,22 +3,18 @@ package cz.chm4.chmtestapp.search.searchList.ui
 import cz.chm4.chmtestapp.search.common.bl.EntityType
 import cz.chm4.chmtestapp.search.common.bl.Gender
 import cz.chm4.chmtestapp.search.common.bl.SearchEntityBl
-import cz.chm4.chmtestapp.search.common.bl.SearchRepository
+import cz.chm4.chmtestapp.search.searchList.bl.SearchListRepository
 import cz.chm4.chmtestapp.search.common.bl.Sport
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Before
 
 import org.junit.Assert.*
@@ -31,13 +27,13 @@ class SearchListViewModelTest {
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
 
-    private lateinit var repoMock: SearchRepository
+    private lateinit var repoMock: SearchListRepository
     private lateinit var searchListViewModel: SearchListViewModel
     private lateinit var dataFlow: MutableStateFlow<List<SearchEntityBl>>
 
     @Before
     fun setUp() {
-        repoMock = mockk<SearchRepository>()
+        repoMock = mockk<SearchListRepository>()
         dataFlow = MutableStateFlow(emptyList())
         every { repoMock.getAll() } returns dataFlow
         searchListViewModel = SearchListViewModel(repoMock)

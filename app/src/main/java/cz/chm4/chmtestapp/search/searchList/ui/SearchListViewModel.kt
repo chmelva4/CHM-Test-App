@@ -3,8 +3,7 @@ package cz.chm4.chmtestapp.search.searchList.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.chm4.chmtestapp.search.common.bl.EntityType
-import cz.chm4.chmtestapp.search.common.bl.SearchRepository
-import cz.chm4.chmtestapp.search.common.bl.Sport
+import cz.chm4.chmtestapp.search.searchList.bl.SearchListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchListViewModel @Inject constructor(
-    private val repository: SearchRepository
+    private val repository: SearchListRepository
 ): ViewModel() {
 
     private val _entityFilterFlow = MutableStateFlow(SearchFilter.ALL)

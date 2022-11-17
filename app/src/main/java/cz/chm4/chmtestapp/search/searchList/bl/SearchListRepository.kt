@@ -1,13 +1,15 @@
-package cz.chm4.chmtestapp.search.common.bl
+package cz.chm4.chmtestapp.search.searchList.bl
 
+import cz.chm4.chmtestapp.search.common.bl.SearchEntityBl
+import cz.chm4.chmtestapp.search.common.bl.fromSearchEntityBl
+import cz.chm4.chmtestapp.search.common.bl.toSearchEntityBl
 import cz.chm4.chmtestapp.search.common.data.database.SearchEntityRoom
-import cz.chm4.chmtestapp.search.common.data.database.SearchResultsDao
+import cz.chm4.chmtestapp.search.searchList.data.database.SearchResultsDao
 import cz.chm4.chmtestapp.search.common.data.network.LivesportSearchApi
-import cz.chm4.chmtestapp.search.searchList.ui.SearchFilter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class SearchRepository(
+class SearchListRepository(
     private val livesportSearchApi: LivesportSearchApi,
     private val searchResultsDao: SearchResultsDao
 ) {

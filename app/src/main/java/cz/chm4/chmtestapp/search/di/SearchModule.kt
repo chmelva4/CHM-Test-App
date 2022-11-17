@@ -1,8 +1,8 @@
 package cz.chm4.chmtestapp.search.di
 
 import cz.chm4.chmtestapp.database.AppDatabase
-import cz.chm4.chmtestapp.search.common.bl.SearchRepository
-import cz.chm4.chmtestapp.search.common.data.database.SearchResultsDao
+import cz.chm4.chmtestapp.search.searchList.bl.SearchListRepository
+import cz.chm4.chmtestapp.search.searchList.data.database.SearchResultsDao
 import cz.chm4.chmtestapp.search.common.data.network.LivesportSearchApi
 import cz.chm4.chmtestapp.search.searchDetail.bl.SearchDetailRepository
 import cz.chm4.chmtestapp.search.searchDetail.data.database.SearchDetailDao
@@ -36,7 +36,7 @@ object SearchModule {
 
     @Singleton
     @Provides
-    fun provideSearchRepository(livesportSearchApi: LivesportSearchApi, searchResultsDao: SearchResultsDao): SearchRepository = SearchRepository(livesportSearchApi, searchResultsDao)
+    fun provideSearchRepository(livesportSearchApi: LivesportSearchApi, searchResultsDao: SearchResultsDao): SearchListRepository = SearchListRepository(livesportSearchApi, searchResultsDao)
 
     @Singleton
     @Provides
