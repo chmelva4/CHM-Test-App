@@ -24,6 +24,7 @@ timber = "5.0.1"
 coilCompose = "2.2.2"
 retrofit = "2.9.0"
 retrofitMoshi = "2.9.0"
+moshi = "1.14.0"
 hilt = "2.44.2"
 hiltNavigationCompose = "1.0.0"
 kapt = "1.7.21"
@@ -54,6 +55,9 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coilCompose = {module = "io.coil-kt:coil-compose", version.ref = "coilCompose"}
 retrofit = {module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
 retrofitMoshi = {module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofitMoshi"}
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi"}
+moshiCodegen = {module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi"}
+
 hilt = {module = "com.google.dagger:hilt-android", version.ref = "hilt"}
 hiltCompiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt"}
 hiltNavigationCompose = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose"}

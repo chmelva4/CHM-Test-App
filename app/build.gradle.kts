@@ -77,6 +77,8 @@ dependencies {
     implementation(libs.coilCompose)
     implementation(libs.retrofit)
     implementation(libs.retrofitMoshi)
+    implementation(libs.moshi)
+    ksp(libs.moshiCodegen)
 
     implementation(libs.hilt)
     kapt(libs.hiltCompiler)
