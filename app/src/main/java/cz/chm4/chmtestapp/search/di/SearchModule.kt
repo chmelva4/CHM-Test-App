@@ -8,6 +8,7 @@ import cz.chm4.chmtestapp.search.searchDetail.data.database.SearchDetailDao
 import cz.chm4.chmtestapp.search.searchList.bl.SearchListRepository
 import cz.chm4.chmtestapp.search.searchList.data.database.SearchResultsDao
 import cz.chm4.chmtestapp.search.searchList.data.sharedPrefs.SearchListPrefManager
+import cz.chm4.chmtestapp.search.searchList.data.sharedPrefs.SearchListSharedPrefConstants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,7 +44,7 @@ object SearchModule {
 
     @Singleton
     @Provides
-    fun provideSearchListPrefManager(@ApplicationContext context: Context) = SearchListPrefManager(context)
+    fun provideSearchListPrefManager(@ApplicationContext context: Context) = SearchListPrefManager(SearchListSharedPrefConstants.FILE_NAME ,context)
 
     @Singleton
     @Provides
