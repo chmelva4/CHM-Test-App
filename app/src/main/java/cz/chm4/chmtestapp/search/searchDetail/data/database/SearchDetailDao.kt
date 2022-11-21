@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SearchDetailDao {
 
-    @Query("select * from searchResults where id == :id")
+    @Query("SELECT * FROM searchResults WHERE id == :id")
     fun getSearchEntityById(id: String): Flow<SearchEntityRoom>
 }

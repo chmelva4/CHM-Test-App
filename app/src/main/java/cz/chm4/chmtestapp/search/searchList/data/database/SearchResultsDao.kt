@@ -12,9 +12,9 @@ interface SearchResultsDao {
     @Insert
     suspend fun insert(items: List<SearchEntityRoom>)
 
-    @Query("delete from searchResults")
+    @Query("DELETE FROM searchResults")
     suspend fun deleteAll()
 
-    @Query("select * from searchResults")
+    @Query("SELECT * FROM searchResults")
     fun getAll(): Flow<List<SearchEntityRoom>>
 }
