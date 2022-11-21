@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -94,30 +95,32 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
         }
     }
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        SearchBar(
-            searchText = searchText,
-            onSearchTextChanged = viewModel::setSearchText,
-            isSearchBtnEnabled = !isLoading && searchText.isNotBlank(),
-            onSearchClicked = viewModel::onSearchButtonClicked,
-            onDeleteTextClicked = viewModel::deleteSearchText,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-        Divider()
-        FilterChips(selectedEntity = activeFilter, onEntitySelected = viewModel::setEntityFilter, Modifier.fillMaxWidth())
-
+    Column(Modifier.fillMaxSize()) {
         if (isLoading) {
             LinearProgressIndicator(Modifier.fillMaxWidth())
         }
+        Column(modifier = Modifier.padding(16.dp).weight(1f)) {
 
-        SearchList(
-            data = data,
-            onItemClick = {
-                scope.launch { navController.navigate(Screens.SearchItemDetail.route.replace("{id}", it.id)) }
-            }, modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f))
+            SearchBar(
+                searchText = searchText,
+                onSearchTextChanged = viewModel::setSearchText,
+                isSearchBtnEnabled = !isLoading && searchText.isNotBlank(),
+                onSearchClicked = viewModel::onSearchButtonClicked,
+                onDeleteTextClicked = viewModel::deleteSearchText,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+            Divider()
+            FilterChips(selectedEntity = activeFilter, onEntitySelected = viewModel::setEntityFilter, Modifier.fillMaxWidth())
+
+            SearchList(
+                data = data,
+                onItemClick = {
+                    scope.launch { navController.navigate(Screens.SearchItemDetail.route.replace("{id}", it.id)) }
+                }, modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f))
+        }
     }
 }
 
