@@ -13,21 +13,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.io.Closeable
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchListViewModel @Inject constructor(
     private val repository: SearchListRepository,
     private val searchListPrefManager: SearchListPrefManager,
-): ViewModel() {
+) : ViewModel() {
 
     private val _entityFilterFlow = MutableStateFlow(SearchFilter.ALL)
     val entityFilterFlow = _entityFilterFlow.asStateFlow()
 
     private val _searchTextFlow = MutableStateFlow("")
     val searchTextFlow = _searchTextFlow.asStateFlow()
-
 
     private val _allDataFlow = repository.getAll().map { dataList ->
         dataList.map { item -> SearchListEntity(item.id, item.name, item.image, item.sport, item.type) }.groupBy { it.sport }
@@ -37,7 +35,7 @@ class SearchListViewModel @Inject constructor(
         when (filter) {
             SearchFilter.ALL -> data
             SearchFilter.COMPETITIONS -> data.mapValues { it.value.filter { item -> item.type == EntityType.COMPETITION } }
-            SearchFilter.PARTICIPANTS -> data.mapValues { it.value.filter { item -> item.type != EntityType.COMPETITION} }
+            SearchFilter.PARTICIPANTS -> data.mapValues { it.value.filter { item -> item.type != EntityType.COMPETITION } }
         }
     }
 
@@ -59,7 +57,6 @@ class SearchListViewModel @Inject constructor(
         searchListPrefManager.saveData(_searchTextFlow.value, _entityFilterFlow.value)
     }
 
-
     fun setSearchText(text: String) {
         viewModelScope.launch {
             _searchTextFlow.emit(text)
@@ -80,9 +77,9 @@ class SearchListViewModel @Inject constructor(
 
     fun onSearchButtonClicked() {
         viewModelScope.launch {
-           _isLoadingFlow.emit(true)
+            _isLoadingFlow.emit(true)
             try {
-               repository.search(searchTextFlow.value)
+                repository.search(searchTextFlow.value)
             } catch (e: Exception) {
                 _hasErrorFlow.emit(Unit)
             }

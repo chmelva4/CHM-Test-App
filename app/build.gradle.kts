@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ksp)
     id("kotlin-kapt")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ktlint)
 }
 
 val packageName = "cz.chm4.chmtestapp"
@@ -70,7 +71,7 @@ android {
 dependencies {
     implementation(libs.bundles.androidX)
     implementation(libs.bundles.compose)
-    //implementation(libs.timeTravel)
+    // implementation(libs.timeTravel)
     implementation(libs.timber)
 
     implementation(libs.coilCompose)

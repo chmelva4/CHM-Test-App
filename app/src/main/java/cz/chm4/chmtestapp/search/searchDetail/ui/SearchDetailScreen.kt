@@ -3,7 +3,6 @@ package cz.chm4.chmtestapp.search.searchDetail.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,9 +23,11 @@ fun SearchDetailScreen(
 ) {
     val entity by viewModel.getSearchEntity(searchEntityId).collectAsStateWithLifecycle(SearchEntityBl.EmptyEntity)
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(MaterialTheme.spacing.medium)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(MaterialTheme.spacing.medium)
+    ) {
         SearchEntityDisplay(entity = entity, modifier = Modifier.fillMaxSize())
     }
 }

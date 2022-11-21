@@ -1,6 +1,5 @@
 package cz.chm4.chmtestapp.search.searchList.ui
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,7 +20,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,7 +58,6 @@ import coil.compose.AsyncImage
 import cz.chm4.chmtestapp.R
 import cz.chm4.chmtestapp.navigation.Screens
 import cz.chm4.chmtestapp.search.common.bl.Sport
-import cz.chm4.chmtestapp.search.searchList.data.sharedPrefs.SearchListSharedPrefConstants
 import cz.chm4.chmtestapp.theme.spacing
 import kotlinx.coroutines.launch
 
@@ -117,9 +114,11 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
                 data = data,
                 onItemClick = {
                     scope.launch { navController.navigate(Screens.SearchItemDetail.route.replace("{id}", it.id)) }
-                }, modifier = Modifier
+                },
+                modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f))
+                    .weight(1f)
+            )
         }
     }
 }
@@ -136,7 +135,7 @@ fun SearchBar(
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         val keyboardController = LocalSoftwareKeyboardController.current
-        val trailingIcon: @Composable ()-> Unit = if (searchText.isNotEmpty()) {
+        val trailingIcon: @Composable () -> Unit = if (searchText.isNotEmpty()) {
             {
                 IconButton(onClick = onDeleteTextClicked) {
                     Icon(Icons.Default.Close, contentDescription = stringResource(id = R.string.btn_delete_desc))
@@ -162,8 +161,8 @@ fun SearchBar(
         )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
         OutlinedButton(onClick = {
-             keyboardController?.hide()
-             onSearchClicked()
+            keyboardController?.hide()
+            onSearchClicked()
         }, enabled = isSearchBtnEnabled) {
             Text(text = stringResource(id = R.string.search))
         }
@@ -178,7 +177,7 @@ fun FilterChips(
     modifier: Modifier = Modifier
 ) {
 
-    val selectedIcon: @Composable ()-> Unit = {
+    val selectedIcon: @Composable () -> Unit = {
         Icon(
             imageVector = Icons.Filled.Done,
             contentDescription = stringResource(id = R.string.filter_active_desc),
@@ -189,21 +188,21 @@ fun FilterChips(
     Row(modifier = modifier) {
         FilterChip(
             selected = selectedEntity == SearchFilter.ALL,
-            onClick = {onEntitySelected(SearchFilter.ALL)},
+            onClick = { onEntitySelected(SearchFilter.ALL) },
             label = { Text(stringResource(id = R.string.filter_all)) },
             selectedIcon = selectedIcon
         )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
         FilterChip(
             selected = selectedEntity == SearchFilter.COMPETITIONS,
-            onClick = {onEntitySelected(SearchFilter.COMPETITIONS)},
+            onClick = { onEntitySelected(SearchFilter.COMPETITIONS) },
             label = { Text(stringResource(id = R.string.filter_competitions)) },
             selectedIcon = selectedIcon
         )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
         FilterChip(
             selected = selectedEntity == SearchFilter.PARTICIPANTS,
-            onClick = {onEntitySelected(SearchFilter.PARTICIPANTS)},
+            onClick = { onEntitySelected(SearchFilter.PARTICIPANTS) },
             label = { Text(stringResource(id = R.string.filter_participants)) },
             selectedIcon = selectedIcon
         )
@@ -213,7 +212,7 @@ fun FilterChips(
 @Composable
 fun SearchList(
     data: Map<Sport, List<SearchListEntity>>,
-    onItemClick:  (SearchListEntity) -> Unit,
+    onItemClick: (SearchListEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -221,7 +220,7 @@ fun SearchList(
         data.map {
             if (it.value.isNotEmpty())
                 item {
-                    val sportName = when(it.key) {
+                    val sportName = when (it.key) {
                         Sport.FOOTBALL -> stringResource(id = R.string.sport_football)
                         Sport.TENNIS -> stringResource(id = R.string.sport_tennis)
                         Sport.BASKETBALL -> stringResource(id = R.string.sport_basketball)
@@ -243,9 +242,11 @@ fun SearchList(
 
 @Composable
 fun SportDivider(text: String) {
-    Surface(modifier = Modifier
-        .fillMaxWidth()
-        .border(1.dp, Color.Black)) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, Color.Black)
+    ) {
         Text(text = text, style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(MaterialTheme.spacing.xxSmall))
     }
 }
@@ -256,7 +257,8 @@ fun SportListItem(
     onItemClick: (SearchListEntity) -> Unit
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = MaterialTheme.spacing.xSmall)
             .clickable { onItemClick(item) }
@@ -270,9 +272,11 @@ fun SportListItem(
                     .clip(CircleShape)
             )
         } else {
-            Box(modifier = Modifier
-                .size(40.dp)
-                .background(Color.Gray.copy(alpha = 0.35f), CircleShape))
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(Color.Gray.copy(alpha = 0.35f), CircleShape)
+            )
         }
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
         Text(text = item.name, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))

@@ -2,11 +2,11 @@ package cz.chm4.chmtestapp.search.di
 
 import android.content.Context
 import cz.chm4.chmtestapp.database.AppDatabase
-import cz.chm4.chmtestapp.search.searchList.bl.SearchListRepository
-import cz.chm4.chmtestapp.search.searchList.data.database.SearchResultsDao
 import cz.chm4.chmtestapp.search.common.data.network.LivesportSearchApi
 import cz.chm4.chmtestapp.search.searchDetail.bl.SearchDetailRepository
 import cz.chm4.chmtestapp.search.searchDetail.data.database.SearchDetailDao
+import cz.chm4.chmtestapp.search.searchList.bl.SearchListRepository
+import cz.chm4.chmtestapp.search.searchList.data.database.SearchResultsDao
 import cz.chm4.chmtestapp.search.searchList.data.sharedPrefs.SearchListPrefManager
 import dagger.Module
 import dagger.Provides

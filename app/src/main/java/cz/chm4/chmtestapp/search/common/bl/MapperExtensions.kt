@@ -1,6 +1,5 @@
 package cz.chm4.chmtestapp.search.common.bl
 
-import android.util.Log
 import cz.chm4.chmtestapp.search.common.data.database.SearchEntityRoom
 import cz.chm4.chmtestapp.search.common.data.network.IdObject
 import cz.chm4.chmtestapp.search.common.data.network.SearchEntity
@@ -34,4 +33,3 @@ fun SearchEntityRoom.Companion.fromSearchEntityBl(item: SearchEntityBl): SearchE
         item.id, item.name, item.gender.toString(), item.type.toString(), item.sport.toString(), item.country, item.image
     )
 }
-
