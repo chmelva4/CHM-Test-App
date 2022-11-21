@@ -72,6 +72,12 @@ class SearchListViewModel @Inject constructor(
         }
     }
 
+    fun deleteSearchText() {
+        viewModelScope.launch {
+            _searchTextFlow.emit("")
+        }
+    }
+
     fun onSearchButtonClicked() {
         viewModelScope.launch {
            _isLoadingFlow.emit(true)

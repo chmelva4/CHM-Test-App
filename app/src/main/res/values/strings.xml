@@ -26,4 +26,5 @@
     <string name="gender_mix">Mix</string>
     <string name="label_category">Kategorie:</string>
     <string name="label_country">Země původu:</string>
+    <string name="btn_delete_desc">Delete text button</string>
 </resources>

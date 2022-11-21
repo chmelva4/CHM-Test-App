@@ -19,12 +19,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -97,6 +100,7 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
             onSearchTextChanged = viewModel::setSearchText,
             isSearchBtnEnabled = !isLoading && searchText.isNotBlank(),
             onSearchClicked = viewModel::onSearchButtonClicked,
+            onDeleteTextClicked = viewModel::deleteSearchText,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
@@ -124,10 +128,21 @@ fun SearchBar(
     onSearchTextChanged: (String) -> Unit,
     isSearchBtnEnabled: Boolean,
     onSearchClicked: () -> Unit,
+    onDeleteTextClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         val keyboardController = LocalSoftwareKeyboardController.current
+        val trailingIcon: @Composable ()-> Unit = if (searchText.isNotEmpty()) {
+            {
+                IconButton(onClick = onDeleteTextClicked) {
+                    Icon(Icons.Default.Close, contentDescription = stringResource(id = R.string.btn_delete_desc))
+                }
+            }
+        } else {
+            {}
+        }
+
         OutlinedTextField(
             value = searchText,
             onValueChange = onSearchTextChanged,
@@ -139,7 +154,8 @@ fun SearchBar(
                     keyboardController?.hide()
                     onSearchClicked()
                 }
-            )
+            ),
+            trailingIcon = trailingIcon
         )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
         OutlinedButton(onClick = {
