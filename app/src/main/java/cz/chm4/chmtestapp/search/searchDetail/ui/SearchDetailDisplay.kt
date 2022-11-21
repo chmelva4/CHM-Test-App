@@ -50,7 +50,7 @@ fun SearchEntityDisplay(entity: SearchEntityBl, modifier: Modifier = Modifier) {
 fun TextItem(
     label: String,
     text: String,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween) {
         Text(text = label, style = MaterialTheme.typography.labelLarge)
