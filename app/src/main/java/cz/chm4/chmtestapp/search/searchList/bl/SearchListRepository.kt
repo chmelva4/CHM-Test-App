@@ -17,7 +17,7 @@ class SearchListRepository(
     suspend fun search(searchQuery: String) {
         val data = livesportSearchApi.search(searchQuery).map { it.toSearchEntityBl() }
         searchResultsDao.deleteAll()
-        searchResultsDao.insert(data.map { SearchEntityRoom.fromSearchEntityBl(it) })
+        searchResultsDao.insert(data.map { fromSearchEntityBl(it) })
     }
 
     fun getAll(): Flow<List<SearchEntityBl>> = searchResultsDao.getAll().map { it.map { item -> item.toSearchEntityBl() } }

@@ -28,7 +28,7 @@ fun SearchEntityRoom.toSearchEntityBl(): SearchEntityBl {
     return SearchEntityBl(id, name, Gender.valueOf(gender), EntityType.valueOf(type), Sport.valueOf(sport), country, image)
 }
 
-fun SearchEntityRoom.Companion.fromSearchEntityBl(item: SearchEntityBl): SearchEntityRoom {
+fun fromSearchEntityBl(item: SearchEntityBl): SearchEntityRoom {
     return SearchEntityRoom(
         item.id, item.name, item.gender.toString(), item.type.toString(), item.sport.toString(), item.country, item.image
     )
