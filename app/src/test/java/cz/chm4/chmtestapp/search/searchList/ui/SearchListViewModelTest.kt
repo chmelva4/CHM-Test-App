@@ -7,10 +7,12 @@ import cz.chm4.chmtestapp.search.common.bl.SearchEntityBl
 import cz.chm4.chmtestapp.search.common.bl.Sport
 import cz.chm4.chmtestapp.search.searchList.bl.SearchListRepository
 import cz.chm4.chmtestapp.search.searchList.data.sharedPrefs.SearchListPrefManager
+import io.mockk.Answer
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -48,7 +50,7 @@ class SearchListViewModelTest {
         val job = launch(UnconfinedTestDispatcher()) { searchListViewModel.searchTextFlow.collect {} }
 
         // WHEN
-        val start = assertEquals("", searchListViewModel.searchTextFlow.value)
+        val start = searchListViewModel.searchTextFlow.value
         searchListViewModel.setSearchText("Wimbledon")
         advanceUntilIdle()
 
@@ -211,5 +213,47 @@ class SearchListViewModelTest {
         assertEquals("4", players?.get(2)?.id)
 
         job.cancel()
+    }
+
+    @Test
+    fun `properly loads search text and filter from manager`() = runTest {
+        // GIVEN
+        val job = launch(UnconfinedTestDispatcher()) { searchListViewModel.entityFilterFlow.collect {} }
+        val job2 = launch(UnconfinedTestDispatcher()) { searchListViewModel.searchTextFlow.collect {} }
+        every { prefMock.restoreData() } returns Pair("text1", SearchFilter.PARTICIPANTS)
+
+        // WHEN
+        val start = searchListViewModel.entityFilterFlow.value
+        searchListViewModel.loadSharedPrefsData()
+        advanceUntilIdle()
+
+        // THEN
+        assertEquals(SearchFilter.ALL, start)
+        assertEquals(SearchFilter.PARTICIPANTS, searchListViewModel.entityFilterFlow.value)
+        assertEquals("text1", searchListViewModel.searchTextFlow.value)
+
+        job.cancel()
+        job2.cancel()
+    }
+
+    @Test
+    fun `properly stores search text and filter from manager`() = runTest {
+        // GIVEN
+        val job = launch(UnconfinedTestDispatcher()) { searchListViewModel.entityFilterFlow.collect {} }
+        val job2 = launch(UnconfinedTestDispatcher()) { searchListViewModel.searchTextFlow.collect {} }
+        every { prefMock.saveData(any(), any()) } returns
+        searchListViewModel.setSearchText("text1")
+        searchListViewModel.setEntityFilter(SearchFilter.PARTICIPANTS)
+
+        // WHEN
+        advanceUntilIdle()
+        searchListViewModel.saveSharedPrefsData()
+        advanceUntilIdle()
+
+        // THEN
+       verify { prefMock.saveData("text1", SearchFilter.PARTICIPANTS) }
+
+        job.cancel()
+        job2.cancel()
     }
 }
