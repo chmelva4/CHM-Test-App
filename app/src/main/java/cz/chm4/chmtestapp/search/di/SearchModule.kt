@@ -1,14 +1,17 @@
 package cz.chm4.chmtestapp.search.di
 
+import android.content.Context
 import cz.chm4.chmtestapp.database.AppDatabase
 import cz.chm4.chmtestapp.search.searchList.bl.SearchListRepository
 import cz.chm4.chmtestapp.search.searchList.data.database.SearchResultsDao
 import cz.chm4.chmtestapp.search.common.data.network.LivesportSearchApi
 import cz.chm4.chmtestapp.search.searchDetail.bl.SearchDetailRepository
 import cz.chm4.chmtestapp.search.searchDetail.data.database.SearchDetailDao
+import cz.chm4.chmtestapp.search.searchList.data.sharedPrefs.SearchListPrefManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -37,6 +40,10 @@ object SearchModule {
     @Singleton
     @Provides
     fun provideSearchRepository(livesportSearchApi: LivesportSearchApi, searchResultsDao: SearchResultsDao): SearchListRepository = SearchListRepository(livesportSearchApi, searchResultsDao)
+
+    @Singleton
+    @Provides
+    fun provideSearchListPrefManager(@ApplicationContext context: Context) = SearchListPrefManager(context)
 
     @Singleton
     @Provides

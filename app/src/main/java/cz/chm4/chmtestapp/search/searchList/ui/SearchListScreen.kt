@@ -71,19 +71,7 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
     val activeFilter by viewModel.entityFilterFlow.collectAsStateWithLifecycle()
     val data by viewModel.dataFlow.collectAsStateWithLifecycle(emptyMap())
 
-    DisposableEffect(viewModel) {
-        val sp = ctx.getSharedPreferences(SearchListSharedPrefConstants.FILE_NAME, Context.MODE_PRIVATE)
-        viewModel.setSearchText(sp.getString(SearchListSharedPrefConstants.SEARCH_TEXT_KEY, "") ?: "")
-        viewModel.setEntityFilter(SearchFilter.valueOf(sp.getString(SearchListSharedPrefConstants.FILTER_KEY, SearchFilter.ALL.toString()) ?: SearchFilter.ALL.toString()))
-        onDispose {
-            val editor = sp.edit()
-            editor.putString(SearchListSharedPrefConstants.SEARCH_TEXT_KEY, searchText)
-            editor.putString(SearchListSharedPrefConstants.FILTER_KEY, activeFilter.toString())
-            editor.apply()
-        }
-    }
-
-    LaunchedEffect(true) {
+    LaunchedEffect(viewModel) {
         this.launch {
             viewModel.hasErrorFlow.collect {
                 val result = snackbarHostState.showSnackbar(
@@ -93,6 +81,13 @@ fun SearchListScreen(navController: NavController, snackbarHostState: SnackbarHo
                     viewModel.onSearchButtonClicked()
                 }
             }
+        }
+    }
+
+    DisposableEffect(viewModel) {
+        viewModel.loadSharedPrefsData()
+        onDispose {
+            viewModel.saveSharedPrefsData()
         }
     }
 
