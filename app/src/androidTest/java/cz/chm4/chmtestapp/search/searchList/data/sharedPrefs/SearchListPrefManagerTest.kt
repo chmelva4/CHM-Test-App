@@ -3,7 +3,7 @@ package cz.chm4.chmtestapp.search.searchList.data.sharedPrefs
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import cz.chm4.chmtestapp.search.searchList.ui.SearchFilter
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

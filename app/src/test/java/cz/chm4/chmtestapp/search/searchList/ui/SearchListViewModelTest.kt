@@ -7,7 +7,6 @@ import cz.chm4.chmtestapp.search.common.bl.SearchEntityBl
 import cz.chm4.chmtestapp.search.common.bl.Sport
 import cz.chm4.chmtestapp.search.searchList.bl.SearchListRepository
 import cz.chm4.chmtestapp.search.searchList.data.sharedPrefs.SearchListPrefManager
-import io.mockk.Answer
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -19,7 +18,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
