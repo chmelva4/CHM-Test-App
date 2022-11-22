@@ -22,6 +22,8 @@ import javax.inject.Singleton
 @Module
 object SearchModule {
 
+    const val BASE_IMG_URL = "https://www.livesport.cz/res/image/data/"
+
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {

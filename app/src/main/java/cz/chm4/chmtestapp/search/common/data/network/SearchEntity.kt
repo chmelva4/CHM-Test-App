@@ -11,8 +11,4 @@ data class SearchEntity(
     val sport: IdObject,
     val defaultCountry: IdObject,
     val images: List<ImageObject>
-) {
-    companion object {
-        const val BASE_IMG_URL = "https://www.livesport.cz/res/image/data/"
-    }
-}
+)
